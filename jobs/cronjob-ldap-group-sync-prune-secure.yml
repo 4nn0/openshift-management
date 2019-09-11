@@ -31,6 +31,11 @@ parameters:
   description: "Name of the Service Account To Exeucte the Job As."
   value: "ldap-group-syncer"
   required: true
+- name: "JOB_TYPE"
+  displayName: "Type of job (prune|sync)"
+  description: "Type of job that will run. Must specify 'prune' or 'sync'"
+  value: ''
+  required: true
 - name: "SUCCESS_JOBS_HISTORY_LIMIT"
   displayName: "Successful Job History Limit"
   description: "The number of successful jobs that will be retained"
@@ -210,7 +215,7 @@ objects:
               command:
               - "/bin/bash"
               - "-c"
-              - oc adm groups sync --confirm
+              - oc adm groups ${JOB_TYPE} --confirm
                 --sync-config=/ldap-sync/config/ldap-group-sync.yaml
                 $([ -s /ldap-sync/config/whitelist.txt ] && echo --whitelist=/ldap-sync/config/whitelist.txt)
               volumeMounts:
